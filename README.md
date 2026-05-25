@@ -29,7 +29,7 @@ An Xcode project is available in `ios`. It wraps this same app in an offline iOS
 
 ## Current Scope
 
-- DOACs: apixaban, rivaroxaban, edoxaban, dabigatran
+- DOACs/direct thrombin inhibitors: apixaban, rivaroxaban, edoxaban, dabigatran, argatroban
 - Heparins: IV UFH, SQ UFH, LMWH/enoxaparin
 - Warfarin
 - Antiplatelets: aspirin/NSAIDs, clopidogrel, prasugrel, ticagrelor, cangrelor, cilostazol
@@ -45,3 +45,5 @@ An Xcode project is available in `ios`. It wraps this same app in an offline iOS
 - RAPM article ID `rapm-2024-105766`: https://rapm.bmj.com/content/early/2025/10/16/rapm-2024-105766
 - ASRA public guideline page: https://asra.com/news-publications/asra-updates/blog-landing/guidelines/2025/01/31/regional-anesthesia-in-the-patient-receiving-antithrombotic-or-thrombolytic-therapy-american-society-of-regional-anesthesia-and-pain-medicine-evidence-based-guidelines-%28fifth-edition%29
 - ASRA interventional spine and pain procedure anticoagulation guideline summary: https://asra.com/news-publications/asra-updates/blog-landing/guidelines/2022/12/14/interventional-spine-and-pain-procedures-in-patients-on-antiplatelet-and-anticoagulant-medications-%28second-edition%29
+- OpenAnesthesia ASRA antithrombotic therapy summary, part 2: https://www.openanesthesia.org/keywords/regional-anesthesia-in-patients-receiving-antithrombotic-or-thrombolytic-therapy-part-2/
+- NYSORA regional anesthesia in anticoagulated patients: https://www.nysora.com/topics/sub-specialties/regional-anesthesia-in-anticoagulated-patients/

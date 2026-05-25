@@ -1,4 +1,4 @@
-const CACHE_NAME = "anticoagulant-hold-v5";
+const CACHE_NAME = "anticoagulant-hold-v9";
 const APP_SHELL = [
   "./",
   "./index.html",

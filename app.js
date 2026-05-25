@@ -159,6 +159,19 @@ const rules = {
     level: "Acceptable level described by the guideline: dabigatran concentration below 30 ng/mL. Normal aPTT or dilute thrombin time can also indicate minimal residual effect.",
     notes: ["This procedure is not suggested when CrCl is below 30 mL/min unless a drug-specific assay confirms acceptable residual activity."]
   },
+  argatroban: {
+    name: "Argatroban",
+    options: [{ id: "infusion", label: "IV direct thrombin inhibitor" }],
+    holdHours: () => 4,
+    rangeText: "4-6 hours plus normal baseline aPTT",
+    restartHours: 4,
+    restartText: "4-6 hours after needle placement or catheter removal",
+    requiresLab: true,
+    catheter: "For catheter removal, stop argatroban and confirm normal baseline aPTT before removal; use specialist review if anticoagulant effect persists.",
+    summary: "Argatroban is an IV direct thrombin inhibitor monitored with aPTT. ASRA/OpenAnesthesia and NYSORA summarize parenteral thrombin inhibitors as agents for which regional techniques are recommended against while the patient is receiving them. This app also supports an institutional exception workflow: stop infusion 4-6 hours before the procedure and verify aPTT has returned to normal baseline before needle placement or catheter removal.",
+    level: "Mandatory lab check: aPTT must be verified at normal baseline before proceeding.",
+    notes: ["Argatroban effect may be prolonged in hepatic impairment.", "NYSORA notes that direct thrombin inhibitor effects are monitored via aPTT and last about 3 hours after IV administration, but regional techniques are not recommended in patients taking argatroban or bivalirudin.", "OpenAnesthesia's ASRA summary recommends against these techniques in patients receiving parenteral thrombin inhibitors such as argatroban.", "The Stanford table also lists argatroban IV infusion as avoid techniques; follow local policy and specialist guidance when this differs from a timed institutional protocol."]
+  },
   ivHeparin: {
     name: "Unfractionated heparin IV",
     options: [{ id: "infusion", label: "Continuous infusion" }],
@@ -378,6 +391,11 @@ function painProcedureGuidance(ruleId, rule, params) {
     guidance.holdHours = highOrIntermediate ? (params.renal === "30-49" || params.renal === "lt30" ? 5 * 24 : 4 * 24) : 0;
     guidance.restartHours = 24;
     guidance.rangeText = highOrIntermediate ? "4 days; 5-6 days with impaired renal function" : "Shared assessment and risk stratification";
+  } else if (ruleId === "argatroban") {
+    guidance.holdHours = 4;
+    guidance.restartHours = 4;
+    guidance.rangeText = "4-6 hours plus normal baseline aPTT";
+    guidance.notes.push("For pain procedures, verify normal baseline aPTT before needle placement or catheter removal.");
   } else if (ruleId === "ivHeparin") {
     guidance.holdHours = 6;
     guidance.restartHours = 2;
@@ -440,9 +458,10 @@ function calculate() {
   el.selectedRuleTitle.textContent = rule.name;
   el.selectedRuleText.textContent = `${rule.summary} ${rule.catheter}`;
   el.minimumHold.textContent = formatHours(holdHours, rangeText);
-  el.restartGuidance.textContent = !Number.isFinite(restartHours) ? "Specialist-directed restart" : restartHours === 0 ? "No required delay after removal/placement unless loading dose or bleeding concern" : `${restartHours} hours after needle placement or catheter removal`;
+  el.restartGuidance.textContent = rule.restartText || (!Number.isFinite(restartHours) ? "Specialist-directed restart" : restartHours === 0 ? "No required delay after removal/placement unless loading dose or bleeding concern" : `${restartHours} hours after needle placement or catheter removal`);
 
   if (rule.level) notes.push(rule.level);
+  if (rule.requiresLab && !el.labCleared.checked) notes.push("Do not proceed until the required lab confirmation checkbox reflects documented normal baseline clotting status.");
   if (el.bloodyTap.checked) notes.push("Traumatic placement may justify delaying postoperative dosing longer than the default restart interval.");
   if (el.renal.value === "unknown" && ["dabigatran", "rivaroxaban"].includes(ruleId)) notes.push("Renal function is required for the most reliable DOAC timing decision.");
   if (context === "catheter") notes.push(rule.catheter);
@@ -501,9 +520,12 @@ function calculate() {
   const elapsed = (plannedProcedure.getTime() - lastDose.getTime()) / HOUR;
   const progress = Number.isFinite(holdHours) && holdHours > 0 ? Math.max(0, Math.min(100, elapsed / holdHours * 100)) : 100;
   el.elapsedBar.style.width = `${progress}%`;
-  el.earliestTime.textContent = labOverride && (!earliest || procedure < earliest) ? "Acceptable level documented" : formatDate(earliest);
+  el.earliestTime.textContent = labOverride && (!earliest || plannedProcedure < earliest) ? "Acceptable level documented" : formatDate(earliest);
 
-  if (labOverride && (!earliest || procedure < earliest)) {
+  if (rule.requiresLab && !el.labCleared.checked) {
+    el.riskBand.className = "result-band stop";
+    el.riskBand.textContent = "Required lab confirmation missing";
+  } else if (labOverride && (!earliest || plannedProcedure < earliest)) {
     el.riskBand.className = "result-band ready";
     el.riskBand.textContent = "Level-based clearance documented";
   } else if (holdHours === 0 || plannedProcedure >= earliest) {
