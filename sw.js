@@ -1,4 +1,4 @@
-const CACHE_NAME = "anticoagulant-hold-v2";
+const CACHE_NAME = "anticoagulant-hold-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -7,7 +7,9 @@ const APP_SHELL = [
   "./manifest.webmanifest",
   "./assets/icons/icon.svg",
   "./assets/icons/icon-192.png",
-  "./assets/icons/icon-512.png"
+  "./assets/icons/icon-192-maskable.png",
+  "./assets/icons/icon-512.png",
+  "./assets/icons/icon-512-maskable.png"
 ];
 
 self.addEventListener("install", (event) => {
