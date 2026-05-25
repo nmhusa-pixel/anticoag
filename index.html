@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#245b8f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Anticoagulant Hold">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Neuraxial Anticoagulant Hold</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">ASRA fifth edition decision aid</p>
+        <h1>Neuraxial anticoagulant hold</h1>
+      </div>
+      <div class="status-chip" id="clockChip">Local time</div>
+    </header>
+
+    <main class="layout">
+      <section class="tool-panel" aria-labelledby="calculatorTitle">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Patient and drug</p>
+            <h2 id="calculatorTitle">Hold-time calculator</h2>
+          </div>
+          <button class="icon-button" id="resetButton" type="button" title="Reset inputs" aria-label="Reset inputs">R</button>
+        </div>
+
+        <div class="grid two">
+          <label>
+            Procedure
+            <select id="procedureType"></select>
+          </label>
+          <label>
+            Bleeding-risk modifiers
+            <select id="bleedingModifier">
+              <option value="none">No added modifier</option>
+              <option value="upgrade">Upgrade one risk level</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="risk-summary" id="procedureRiskSummary">
+          <span id="procedureRiskPill">Neuraxial</span>
+          <p id="procedureRiskText">Uses ASRA fifth-edition neuraxial/deep plexus timing.</p>
+        </div>
+
+        <div class="grid two">
+          <label>
+            Medication
+            <select id="medication"></select>
+          </label>
+          <label>
+            Dose / indication
+            <select id="doseType"></select>
+          </label>
+        </div>
+
+        <div class="grid three">
+          <label>
+            Last dose
+            <input id="lastDose" type="datetime-local">
+          </label>
+          <label>
+            Planned injection
+            <input id="procedureTime" type="datetime-local">
+          </label>
+          <label>
+            CrCl / eGFR
+            <select id="renalFunction">
+              <option value="normal">>= 50 mL/min</option>
+              <option value="30-49">30-49 mL/min</option>
+              <option value="lt30">&lt; 30 mL/min</option>
+              <option value="unknown">Unknown</option>
+            </select>
+          </label>
+        </div>
+
+        <fieldset class="segmented" aria-label="Clinical context">
+          <label><input type="radio" name="context" value="needle" checked> Single-shot / needle placement</label>
+          <label><input type="radio" name="context" value="catheter"> Indwelling catheter</label>
+        </fieldset>
+
+        <div class="grid two catheter-fields" id="catheterFields">
+          <label>
+            Catheter action
+            <select id="catheterAction">
+              <option value="remove">Remove catheter</option>
+              <option value="restart">Restart after removal</option>
+            </select>
+          </label>
+          <label>
+            Catheter removal time
+            <input id="catheterRemoval" type="datetime-local">
+          </label>
+        </div>
+
+        <div class="checks">
+          <label><input id="bloodyTap" type="checkbox"> Bloody or traumatic placement</label>
+          <label><input id="labCleared" type="checkbox"> Acceptable drug-specific level documented</label>
+        </div>
+
+        <div class="result" id="resultCard" aria-live="polite">
+          <div class="result-band" id="riskBand">Choose a medication</div>
+          <div class="result-main">
+            <div>
+              <p class="label">Earliest neuraxial time</p>
+              <strong id="earliestTime">--</strong>
+            </div>
+            <div>
+              <p class="label">Minimum hold</p>
+              <strong id="minimumHold">--</strong>
+            </div>
+            <div>
+              <p class="label">Restart guidance</p>
+              <strong id="restartGuidance">--</strong>
+            </div>
+          </div>
+          <div class="timeline" aria-hidden="true">
+            <div class="track">
+              <span id="elapsedBar"></span>
+            </div>
+            <div class="timeline-labels">
+              <span>Last dose</span>
+              <span>Required interval</span>
+              <span>Planned</span>
+            </div>
+          </div>
+          <ul class="notes" id="notesList"></ul>
+        </div>
+      </section>
+
+      <aside class="reference-panel" aria-labelledby="referenceTitle">
+        <div class="spine-visual" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <p class="eyebrow">Traceable rules</p>
+        <h2 id="referenceTitle">Guideline notes</h2>
+        <p class="quiet">
+          Based on ASRA Pain Medicine Evidence-Based Guidelines, fifth edition, for neuraxial block and deep plexus/peripheral block in patients receiving antithrombotic or thrombolytic therapy.
+        </p>
+        <div class="rule-card">
+          <p class="label">Current selection</p>
+          <h3 id="selectedRuleTitle">No medication selected</h3>
+          <p id="selectedRuleText">Select an agent to see the applied hold, catheter, restart, and lab-level logic.</p>
+        </div>
+        <div class="warning-box">
+          <strong>Clinical safety boundary</strong>
+          <p>This app supports timing checks only. It does not replace clinician judgment, local policy, indication-specific thrombosis risk assessment, consent, neurologic monitoring, or specialist consultation.</p>
+        </div>
+        <h3>References</h3>
+        <ol class="refs">
+          <li>Regional anesthesia in the patient receiving antithrombotic or thrombolytic therapy: ASRA Pain Medicine Evidence-Based Guidelines, fifth edition. RAPM article ID <a href="https://rapm.bmj.com/content/early/2025/10/16/rapm-2024-105766" target="_blank" rel="noreferrer">rapm-2024-105766</a>.</li>
+          <li><a href="https://asra.com/news-publications/asra-updates/blog-landing/guidelines/2025/01/31/regional-anesthesia-in-the-patient-receiving-antithrombotic-or-thrombolytic-therapy-american-society-of-regional-anesthesia-and-pain-medicine-evidence-based-guidelines-%28fifth-edition%29" target="_blank" rel="noreferrer">ASRA public guideline page</a>.</li>
+          <li><a href="https://asra.com/news-publications/asra-updates/blog-landing/guidelines/2022/12/14/interventional-spine-and-pain-procedures-in-patients-on-antiplatelet-and-anticoagulant-medications-%28second-edition%29" target="_blank" rel="noreferrer">ASRA interventional spine and pain procedure anticoagulation guideline summary</a>.</li>
+        </ol>
+      </aside>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
