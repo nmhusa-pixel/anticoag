@@ -1,9 +1,9 @@
 {
   "name": "Anticoagulant Hold",
   "short_name": "Hold App",
-  "id": "./?app=v2",
+  "id": "./?app=v3",
   "description": "Clinical timing aid for anticoagulant and antiplatelet holds before regional and pain medicine procedures.",
-  "start_url": "./index.html?app=v2",
+  "start_url": "./index.html?app=v3",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f5f7f8",
@@ -11,25 +11,25 @@
   "orientation": "any",
   "icons": [
     {
-      "src": "./assets/icons/icon-192-v2.png",
+      "src": "./assets/icons/icon-192-v3.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./assets/icons/icon-192-maskable-v2.png",
+      "src": "./assets/icons/icon-192-maskable-v3.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "./assets/icons/icon-512-v2.png",
+      "src": "./assets/icons/icon-512-v3.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./assets/icons/icon-512-maskable-v2.png",
+      "src": "./assets/icons/icon-512-maskable-v3.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
