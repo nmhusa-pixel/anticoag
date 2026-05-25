@@ -2,9 +2,9 @@ const HOUR = 60 * 60 * 1000;
 
 const procedureTypes = {
   neuraxial: {
-    label: "Neuraxial / deep plexus block",
+    label: "Regional / deep plexus block",
     risk: "neuraxial",
-    text: "Uses ASRA fifth-edition neuraxial/deep plexus timing."
+    text: "Uses ASRA fifth-edition regional/deep plexus timing."
   },
   painHigh: {
     label: "Pain procedure - high risk",
@@ -31,8 +31,8 @@ const rules = {
     options: [{ id: "standard", label: "Any dose" }],
     holdHours: () => 0,
     restartHours: 0,
-    catheter: "No additional neuraxial timing restriction when used alone.",
-    summary: "NSAIDs, including aspirin, do not create a level of risk that interferes with neuraxial or deep plexus/peripheral blocks when used alone.",
+    catheter: "No additional regional timing restriction when used alone.",
+    summary: "NSAIDs, including aspirin, do not create a level of risk that interferes with regional or deep plexus/peripheral blocks when used alone.",
     notes: ["Avoid treating this as low risk when other anticoagulants or antiplatelets are also active."]
   },
   clopidogrel: {
@@ -51,7 +51,7 @@ const rules = {
     holdHours: () => 7 * 24,
     rangeText: "7-10 days",
     restartHours: 0,
-    catheter: "Do not maintain neuraxial or deep plexus/peripheral catheters on prasugrel.",
+    catheter: "Do not maintain regional or deep plexus/peripheral catheters on prasugrel.",
     summary: "Suggested interval from discontinuation to needle placement is 7-10 days.",
     notes: ["May be resumed immediately after catheter removal if no loading dose is used."]
   },
@@ -61,7 +61,7 @@ const rules = {
     holdHours: () => 5 * 24,
     rangeText: "5 days",
     restartHours: 24,
-    catheter: "Do not maintain neuraxial or deep plexus/peripheral catheters on ticagrelor.",
+    catheter: "Do not maintain regional or deep plexus/peripheral catheters on ticagrelor.",
     summary: "Suggested interval from discontinuation to needle placement is 5 days.",
     notes: ["Restart is suggested 24 hours after catheter removal or needle placement."]
   },
@@ -91,7 +91,7 @@ const rules = {
     holdHours: () => 5 * 24,
     rangeText: "5 days plus normalized INR",
     restartHours: 0,
-    catheter: "Remove neuraxial catheters when INR is less than 1.5 when feasible, with continued neurologic assessment.",
+    catheter: "Remove regional catheters when INR is less than 1.5 when feasible, with continued neurologic assessment.",
     summary: "Stop 5 days before needle placement and confirm the INR has normalized before block.",
     notes: ["This calculator cannot verify INR. Treat an unknown or elevated INR as not cleared."]
   },
@@ -149,7 +149,7 @@ const rules = {
       return 72;
     },
     rangeText: ({ dose, renal }) => {
-      if (renal === "lt30") return "Avoid neuraxial unless drug level confirms clearance";
+      if (renal === "lt30") return "Avoid procedure unless drug level confirms clearance";
       if (dose === "low") return renal === "30-49" ? "72 hours" : "48 hours";
       return renal === "30-49" ? "120 hours" : "72 hours";
     },
@@ -157,7 +157,7 @@ const rules = {
     catheter: "For unanticipated dosing with a catheter in place, withhold dabigatran until the relevant hold interval or an acceptable dabigatran/aPTT/dTT level is documented.",
     summary: "Dabigatran hold depends strongly on renal function: high dose 72 hours when CrCl is at least 50, 120 hours for CrCl 30-49; low dose 48 or 72 hours.",
     level: "Acceptable level described by the guideline: dabigatran concentration below 30 ng/mL. Normal aPTT or dilute thrombin time can also indicate minimal residual effect.",
-    notes: ["Neuraxial block is not suggested when CrCl is below 30 mL/min unless a drug-specific assay confirms acceptable residual activity."]
+    notes: ["This procedure is not suggested when CrCl is below 30 mL/min unless a drug-specific assay confirms acceptable residual activity."]
   },
   ivHeparin: {
     name: "Unfractionated heparin IV",
@@ -166,7 +166,7 @@ const rules = {
     rangeText: "4-6 hours plus normal coagulation status",
     restartHours: 1,
     catheter: "Stop infusion 4-6 hours and assess coagulation before catheter manipulation. Restart at least 1 hour after needle placement or catheter removal.",
-    summary: "Discontinue IV heparin 4-6 hours before neuraxial placement and verify normal coagulation status.",
+    summary: "Discontinue IV heparin 4-6 hours before placement and verify normal coagulation status.",
     notes: ["Delay IV heparin administration for at least 1 hour after needle placement.", "Review platelet count if heparin exposure exceeds 4 days."]
   },
   scHeparinLow: {
@@ -192,7 +192,7 @@ const rules = {
     holdHours: ({ dose }) => dose === "low" ? 12 : 24,
     rangeText: ({ dose }) => dose === "low" ? "12 hours" : "24 hours",
     restartHours: ({ dose }) => dose === "low" ? 12 : 24,
-    catheter: "Do not combine an indwelling neuraxial catheter with therapeutic LMWH. Twice-daily prophylaxis requires catheter removal before LMWH is initiated.",
+    catheter: "Do not combine an indwelling regional catheter with therapeutic LMWH. Twice-daily prophylaxis requires catheter removal before LMWH is initiated.",
     summary: "Needle placement should occur at least 12 hours after low-dose LMWH and 24 hours after therapeutic-dose LMWH.",
     notes: ["For twice-daily low-dose LMWH, first dose should be the following day and at least 12 hours after needle/catheter placement.", "For single-daily low-dose LMWH, remove catheter 12 hours after last dose and restart at least 4 hours after removal."]
   },
@@ -203,10 +203,10 @@ const rules = {
       { id: "high", label: "High dose / therapeutic" }
     ],
     holdHours: ({ dose }) => dose === "low" ? 36 : Infinity,
-    rangeText: ({ dose }) => dose === "low" ? "36 hours" : "Avoid neuraxial unless anti-Xa confirms low/no activity",
+    rangeText: ({ dose }) => dose === "low" ? "36 hours" : "Avoid procedure unless anti-Xa confirms low/no activity",
     restartHours: 6,
     catheter: "Remove catheter at least 6 hours before the first postoperative fondaparinux dose.",
-    summary: "Low-dose fondaparinux should be held 36 hours. High-dose fondaparinux is generally not suitable for neuraxial techniques unless an acceptable drug-specific anti-Xa level is documented.",
+    summary: "Low-dose fondaparinux should be held 36 hours. High-dose fondaparinux is generally not suitable for these techniques unless an acceptable drug-specific anti-Xa level is documented.",
     notes: ["Use caution because sustained and irreversible antithrombin-mediated factor Xa inhibition limits rescue options."]
   },
   thrombolytic: {
@@ -215,7 +215,7 @@ const rules = {
     holdHours: () => 48,
     rangeText: "At least 48 hours and normal coagulation/fibrinogen",
     restartHours: 48,
-    catheter: "Avoid neuraxial procedures when fibrinolytic therapy is planned. If given unexpectedly with a catheter in place, perform frequent neurologic checks.",
+    catheter: "Avoid these procedures when fibrinolytic therapy is planned. If given unexpectedly with a catheter in place, perform frequent neurologic checks.",
     summary: "Needle placement should be avoided for at least 48 hours after thrombolytic/fibrinolytic therapy and until coagulation studies, including fibrinogen, are normal.",
     notes: ["This is a high-risk scenario. Consult anesthesia pain/regional leadership and the treating service."]
   }
@@ -433,7 +433,7 @@ function calculate() {
   const effectiveRisk = effectiveProcedureRisk();
   el.procedureRiskPill.className = effectiveRisk === "neuraxial" ? "" : effectiveRisk;
   const effectiveRiskLabel = effectiveRisk === "intermediate" ? "medium" : effectiveRisk;
-  el.procedureRiskPill.textContent = effectiveRisk === "neuraxial" ? "Neuraxial" : `${effectiveRiskLabel} risk`;
+  el.procedureRiskPill.textContent = effectiveRisk === "neuraxial" ? "Regional" : `${effectiveRiskLabel} risk`;
   el.procedureRiskText.textContent = selectedProcedure.risk === effectiveRisk ? selectedProcedure.text : `${selectedProcedure.text} Risk upgraded to ${effectiveRiskLabel} because a bleeding-risk modifier is present.`;
 
   el.catheterFields.classList.toggle("active", context === "catheter");
